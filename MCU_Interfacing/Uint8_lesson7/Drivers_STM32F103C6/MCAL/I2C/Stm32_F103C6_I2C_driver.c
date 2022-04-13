@@ -234,6 +234,14 @@ void I2C_GenerateSTOP (I2C_TypeDef * I2Cx, FunctionalState NewState)
  *=======================================================================
  *
 */
+/**================================================================
+* @Fn				-MCAL_I2C_Init
+* @brief			-Initializes I2C according to the specified parameters
+* @param [in] 		-I2Cx: where x can be (1..2 depending on device used)
+* @param [in] 		-I2C_InitStruct: All I2C Configuration I2C_InintTypeDef
+* @retval 			-None
+* Note				-None
+*/
 void MCAL_I2C_Init (I2C_TypeDef * I2Cx, I2C_Config_t * I2C_Config )
 {
 	uint16_t tmpReg = 0 , freqrange = 0 ;
@@ -354,6 +362,13 @@ void MCAL_I2C_Init (I2C_TypeDef * I2Cx, I2C_Config_t * I2C_Config )
 }
 
 
+/**================================================================
+* @Fn				-MCAL_I2C_DeInit
+* @brief			-DEInitializes I2Cx according to the specified parameters
+* @param [in] 		-I2Cx: where x can be (1..2 depending on device used)
+* @retval 			-None
+* Note				-Reset the Model by RCC
+*/
 void MCAL_I2C_DeInit (I2C_TypeDef * I2Cx)
 {
 	if (I2Cx == I2C1)
@@ -372,6 +387,13 @@ void MCAL_I2C_DeInit (I2C_TypeDef * I2Cx)
 }
 
 
+/**================================================================
+* @Fn				-MCAL_I2C_GPIO_Set_Pins
+* @brief			-Initialize GPIO Pins
+* @param [in] 		-I2Cx: where x can be (1..2 depending on device used)
+* @retval 			-None
+* Note				-Should enable the corresponding ALT & GPIO in RCC clock Also called after MCAL_I2C_Init()
+*/
 void MCAL_I2C_GPIO_Set_Pins (I2C_TypeDef * I2Cx)
 {
 	GPIO_PinConfig_t PinCfg ;
@@ -415,7 +437,17 @@ void MCAL_I2C_GPIO_Set_Pins (I2C_TypeDef * I2Cx)
 
 
 
-
+/**================================================================
+* @Fn				-MCAL_I2C_Master_TX
+* @brief			-Transmit data
+* @param [in] 		-I2Cx: where x can be (1..2 depending on device used)
+* @param [in] 		-devAddr: Slave address
+* @param [in] 		-dataOut: data to be transmitted
+* @param [in] 		-dataLen: data length
+* @param [in] 		-Stop: with or without stop condition at the end
+* @param [in] 		-start: with or without start condition
+* @retval 			-None
+*/
 void MCAL_I2C_Master_TX (I2C_TypeDef * I2Cx, uint16_t devAddr, uint8_t *dataOut,
 		uint32_t dataLen, Stop_Condition Stop, Repeated_Start start)
 {
@@ -459,7 +491,17 @@ void MCAL_I2C_Master_TX (I2C_TypeDef * I2Cx, uint16_t devAddr, uint8_t *dataOut,
 }
 
 
-
+/**================================================================
+* @Fn				-MCAL_I2C_Master_RX
+* @brief			-Receive data
+* @param [in] 		-I2Cx: where x can be (1..2 depending on device used)
+* @param [in] 		-devAddr: Slave address
+* @param [in] 		-dataOut: data to be received
+* @param [in] 		-dataLen: data length
+* @param [in] 		-Stop: with or without stop condition at the end
+* @param [in] 		-start: with or without start condition
+* @retval 			-None
+*/
 void MCAL_I2C_Master_RX (I2C_TypeDef * I2Cx, uint16_t devAddr, uint8_t *dataOut,
 		uint32_t dataLen, Stop_Condition Stop, Repeated_Start start)
 {
@@ -510,11 +552,24 @@ void MCAL_I2C_Master_RX (I2C_TypeDef * I2Cx, uint16_t devAddr, uint8_t *dataOut,
 
 
 
-
+/**================================================================
+* @Fn				-MCAL_I2C_SlaveSendData
+* @brief			-Slave Send data
+* @param [in] 		-I2Cx: where x can be (1..2 depending on device used)
+* @param [in] 		-data: data sent
+* @retval 			-None
+*/
 void MCAL_I2C_SlaveSendData (I2C_TypeDef* I2Cx, uint8_t data)
 {
 	I2Cx->I2C_DR = data ;
 }
+
+/**================================================================
+* @Fn				-MCAL_I2C_SlaveReceiveData
+* @brief			-Slave Send data
+* @param [in] 		-I2Cx: where x can be (1..2 depending on device used)
+* @retval 			-None
+*/
 uint8_t MCAL_I2C_SlaveReceiveData (I2C_TypeDef* I2Cx)
 {
 	return (uint8_t)I2Cx->I2C_DR;
